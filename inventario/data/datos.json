@@ -1,0 +1,17 @@
+[
+    {
+        "nombre": "ma\u00edz",
+        "precio": "0.90",
+        "cantidad": "40"
+    },
+    {
+        "nombre": "frejol amarillo",
+        "precio": "1.30",
+        "cantidad": "20"
+    },
+    {
+        "nombre": "harina",
+        "precio": "0.50",
+        "cantidad": "8"
+    }
+]
