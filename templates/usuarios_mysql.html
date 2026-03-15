@@ -3,63 +3,48 @@
 <head>
     <title>Usuarios MySQL</title>
 </head>
-
 <body>
 
 <h1>Gestión de Usuarios (MySQL)</h1>
 
 <h2>Agregar Usuario</h2>
-
 <form action="/agregar_usuario_mysql" method="POST">
+    Nombre:<br>
+    <input type="text" name="nombre" required><br><br>
 
-Nombre:<br>
-<input type="text" name="nombre" required><br><br>
+    Correo:<br>
+    <input type="email" name="mail" required><br><br>
 
-Correo:<br>
-<input type="email" name="mail" required><br><br>
+    Contraseña:<br>
+    <input type="text" name="password" required><br><br>
 
-Contraseña:<br>
-<input type="text" name="password" required><br><br>
-
-<button type="submit">Guardar Usuario</button>
-
+    <button type="submit">Guardar Usuario</button>
 </form>
 
 <hr>
 
 <h2>Lista de Usuarios</h2>
-
 <table border="1">
-
 <tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Password</th>
-<th>Acción</th>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Email</th>
+    <th>Password</th>
+    <th>Acción</th>
 </tr>
 
 {% for u in usuarios %}
-
 <tr>
-
-<td>{{ u[0] }}</td>
-<td>{{ u[1] }}</td>
-<td>{{ u[2] }}</td>
-<td>{{ u[3] }}</td>
-
-<td>
-<a href="/eliminar_usuario_mysql/{{ u[0] }}">Eliminar</a>
-</td>
-
+    <td>{{ u.id }}</td>
+    <td>{{ u.nombre }}</td>
+    <td>{{ u.mail }}</td>
+    <td>{{ u.password }}</td>
+    <td><a href="/eliminar_usuario_mysql/{{ u.id }}">Eliminar</a></td>
 </tr>
-
 {% endfor %}
-
 </table>
 
 <br>
-
 <a href="/">Volver al inicio</a>
 
 </body>
