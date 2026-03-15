@@ -5,10 +5,6 @@ from urllib.parse import urlparse
 def conectar():
     try:
         db_url = os.getenv("DATABASE_URL")
-
-        if not db_url:
-            raise ValueError("DATABASE_URL no está configurada")
-
         url = urlparse(db_url)
 
         conexion = mysql.connector.connect(
@@ -16,7 +12,8 @@ def conectar():
             user=url.username,
             password=url.password,
             database=url.path[1:],
-            port=url.port
+            port=url.port,
+            ssl_disabled=False
         )
 
         return conexion
