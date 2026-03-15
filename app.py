@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3, os, json, csv
-# Importamos la conexión corregida
 from conexion.conexion import conectar as conectar_mysql
 
 app = Flask(__name__)
 
-# --- CONEXION SQLITE (INVENTARIO LOCAL) ---
+# CONEXION SQLITE (INVENTARIO LOCAL)
 
 def conectar():
     return sqlite3.connect("inventario.db")
@@ -23,8 +22,7 @@ with conectar() as conn:
     """)
     conn.commit()
 
-# --- RUTAS PRINCIPALES ---
-
+# RUTAS PRINCIPALES
 @app.route('/')
 def inicio():
     return render_template("index.html")
@@ -46,8 +44,7 @@ def inventario():
 def persistencia():
     return render_template("persistencia.html")
 
-# --- CRUD SQLITE (INVENTARIO) ---
-
+# CRUD SQLITE (INVENTARIO)
 @app.route('/agregar', methods=['POST'])
 def agregar():
     producto = request.form['producto']
@@ -105,7 +102,7 @@ def buscar(id):
     conn.close()
     return render_template("buscar.html", producto=producto)
 
-# --- PERSISTENCIA EN ARCHIVOS ---
+# PERSISTENCIA EN ARCHIVOS
 
 @app.route('/guardar_archivos', methods=['POST'])
 def guardar_archivos():
@@ -171,20 +168,15 @@ def datos():
 
     return render_template("datos.html", txt=datos_txt, json_datos=datos_json, csv_datos=datos_csv)
 
-# --- MYSQL - USUARIOS ---
-
+# MYSQL - USUARIOS
 @app.route('/usuarios_mysql')
 def usuarios_mysql():
     conexion = conectar_mysql()
-    if conexion:
-        # Usamos dictionary=True para que el HTML reconozca u.nombre, u.mail, etc.
-        cursor = conexion.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM usuarios")
-        usuarios = cursor.fetchall()
-        conexion.close()
-        return render_template("usuarios_mysql.html", usuarios=usuarios)
-    else:
-        return "Error al conectar con la base de datos MySQL"
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM usuarios")
+    usuarios = cursor.fetchall()
+    conexion.close()
+    return render_template("usuarios_mysql.html", usuarios=usuarios)
 
 @app.route('/agregar_usuario_mysql', methods=['POST'])
 def agregar_usuario_mysql():
@@ -193,40 +185,32 @@ def agregar_usuario_mysql():
     password = request.form['password']
 
     conexion = conectar_mysql()
-    if conexion:
-        cursor = conexion.cursor()
-        sql = "INSERT INTO usuarios (nombre, mail, password) VALUES (%s,%s,%s)"
-        valores = (nombre, mail, password)
-        cursor.execute(sql, valores)
-        conexion.commit()
-        conexion.close()
+    cursor = conexion.cursor()
+    sql = "INSERT INTO usuarios (nombre, mail, password) VALUES (%s,%s,%s)"
+    valores = (nombre, mail, password)
+    cursor.execute(sql, valores)
+    conexion.commit()
+    conexion.close()
     return redirect('/usuarios_mysql')
 
 @app.route('/eliminar_usuario_mysql/<int:id>')
 def eliminar_usuario_mysql(id):
     conexion = conectar_mysql()
-    if conexion:
-        cursor = conexion.cursor()
-        # Se usa 'id' para coincidir con tu tabla de Clever Cloud
-        cursor.execute("DELETE FROM usuarios WHERE id=%s", (id,))
-        conexion.commit()
-        conexion.close()
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM usuarios WHERE id_usuario=%s", (id,))
+    conexion.commit()
+    conexion.close()
     return redirect('/usuarios_mysql')
 
-# --- MYSQL - PRODUCTOS ---
-
+# MYSQL - PRODUCTOS
 @app.route('/productos_mysql')
 def productos_mysql():
     conexion = conectar_mysql()
-    if conexion:
-        # Usamos dictionary=True para que el HTML reconozca p.nombre, p.precio, etc.
-        cursor = conexion.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM productos")
-        productos = cursor.fetchall()
-        conexion.close()
-        return render_template("productos_mysql.html", productos=productos)
-    else:
-        return "Error al conectar con la base de datos MySQL"
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM productos")
+    productos = cursor.fetchall()
+    conexion.close()
+    return render_template("productos_mysql.html", productos=productos)
 
 @app.route('/agregar_producto_mysql', methods=['POST'])
 def agregar_producto_mysql():
@@ -235,26 +219,25 @@ def agregar_producto_mysql():
     cantidad = request.form['cantidad']
 
     conexion = conectar_mysql()
-    if conexion:
-        cursor = conexion.cursor()
-        sql = "INSERT INTO productos (nombre, precio, cantidad) VALUES (%s,%s,%s)"
-        valores = (nombre, precio, cantidad)
-        cursor.execute(sql, valores)
-        conexion.commit()
-        conexion.close()
+    cursor = conexion.cursor()
+    sql = "INSERT INTO productos (nombre, precio, cantidad) VALUES (%s,%s,%s)"
+    valores = (nombre, precio, cantidad)
+    cursor.execute(sql, valores)
+    conexion.commit()
+    conexion.close()
     return redirect('/productos_mysql')
 
 @app.route('/eliminar_producto_mysql/<int:id>')
 def eliminar_producto_mysql(id):
-    conexion = conexion = conectar_mysql()
-    if conexion:
-        cursor = conexion.cursor()
-        cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
-        conexion.commit()
-        conexion.close()
+    conexion = conectar_mysql()
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM productos WHERE id=%s", (id,))
+    conexion.commit()
+    conexion.close()
     return redirect('/productos_mysql')
 
-# --- EJECUTAR APP ---
+
+# EJECUTAR APP
 
 if __name__ == '__main__':
     app.run(debug=True)
