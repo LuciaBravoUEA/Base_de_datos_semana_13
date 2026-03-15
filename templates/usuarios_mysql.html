@@ -12,8 +12,8 @@
     Nombre:<br>
     <input type="text" name="nombre" required><br><br>
 
-    Correo:<br>
-    <input type="email" name="mail" required><br><br>
+    Email:<br>
+    <input type="email" name="email" required><br><br> 
 
     Contraseña:<br>
     <input type="text" name="password" required><br><br>
@@ -37,7 +37,7 @@
 <tr>
     <td>{{ u.id }}</td>
     <td>{{ u.nombre }}</td>
-    <td>{{ u.mail }}</td>
+    <td>{{ u.email }}</td> 
     <td>{{ u.password }}</td>
     <td><a href="/eliminar_usuario_mysql/{{ u.id }}">Eliminar</a></td>
 </tr>

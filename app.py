@@ -4,12 +4,10 @@ from conexion.conexion import conectar as conectar_mysql
 
 app = Flask(__name__)
 
-# CONEXION SQLITE (INVENTARIO LOCAL)
-
+#  SQLITE (Inventario local)
 def conectar():
     return sqlite3.connect("inventario.db")
 
-# Crear tabla si no existe
 with conectar() as conn:
     cursor = conn.cursor()
     cursor.execute("""
@@ -44,7 +42,7 @@ def inventario():
 def persistencia():
     return render_template("persistencia.html")
 
-# CRUD SQLITE (INVENTARIO)
+#  CRUD SQLITE (Inventario)
 @app.route('/agregar', methods=['POST'])
 def agregar():
     producto = request.form['producto']
@@ -102,8 +100,7 @@ def buscar(id):
     conn.close()
     return render_template("buscar.html", producto=producto)
 
-# PERSISTENCIA EN ARCHIVOS
-
+#  PERSISTENCIA EN ARCHIVOS 
 @app.route('/guardar_archivos', methods=['POST'])
 def guardar_archivos():
     nombre = request.form['nombre']
@@ -168,26 +165,26 @@ def datos():
 
     return render_template("datos.html", txt=datos_txt, json_datos=datos_json, csv_datos=datos_csv)
 
-# MYSQL - USUARIOS
+# MYSQL - USUARIOS 
 @app.route('/usuarios_mysql')
 def usuarios_mysql():
     conexion = conectar_mysql()
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM usuarios")
-    usuarios = cursor.fetchall()
+    usuarios = cursor.fetchall()  # << Diccionarios para Jinja
     conexion.close()
     return render_template("usuarios_mysql.html", usuarios=usuarios)
 
 @app.route('/agregar_usuario_mysql', methods=['POST'])
 def agregar_usuario_mysql():
     nombre = request.form['nombre']
-    mail = request.form['mail']
+    email = request.form['email']  
     password = request.form['password']
 
     conexion = conectar_mysql()
     cursor = conexion.cursor()
-    sql = "INSERT INTO usuarios (nombre, mail, password) VALUES (%s,%s,%s)"
-    valores = (nombre, mail, password)
+    sql = "INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s)"
+    valores = (nombre, email, password)
     cursor.execute(sql, valores)
     conexion.commit()
     conexion.close()
@@ -197,26 +194,26 @@ def agregar_usuario_mysql():
 def eliminar_usuario_mysql(id):
     conexion = conectar_mysql()
     cursor = conexion.cursor()
-    cursor.execute("DELETE FROM usuarios WHERE id_usuario=%s", (id,))
+    cursor.execute("DELETE FROM usuarios WHERE id=%s", (id,))
     conexion.commit()
     conexion.close()
     return redirect('/usuarios_mysql')
 
-# MYSQL - PRODUCTOS
+# MYSQL - PRODUCTOS 
 @app.route('/productos_mysql')
 def productos_mysql():
     conexion = conectar_mysql()
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM productos")
-    productos = cursor.fetchall()
+    productos = cursor.fetchall()  # << Diccionarios para Jinja
     conexion.close()
     return render_template("productos_mysql.html", productos=productos)
 
 @app.route('/agregar_producto_mysql', methods=['POST'])
 def agregar_producto_mysql():
     nombre = request.form['nombre']
-    precio = request.form['precio']
-    cantidad = request.form['cantidad']
+    precio = float(request.form['precio'])
+    cantidad = int(request.form['cantidad'])
 
     conexion = conectar_mysql()
     cursor = conexion.cursor()
@@ -236,8 +233,6 @@ def eliminar_producto_mysql(id):
     conexion.close()
     return redirect('/productos_mysql')
 
-
-# EJECUTAR APP
-
+# EJECUTAR APP 
 if __name__ == '__main__':
     app.run(debug=True)
