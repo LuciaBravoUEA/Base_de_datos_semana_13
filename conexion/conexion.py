@@ -1,24 +1,17 @@
 import mysql.connector
-import os
-from urllib.parse import urlparse
 
 def conectar():
     try:
-        url = os.environ.get("DATABASE_URL")
-
-        datos = urlparse(url)
-
         conexion = mysql.connector.connect(
-            host=datos.hostname,
-            user=datos.username,
-            password=datos.password,
-            database=datos.path.replace("/", ""),
-            port=datos.port,
-            ssl_disabled=False
+            host="b6yidpnlrwoyrb2wge9z-mysql.services.clever-cloud.com",
+            user="USUARIO", # Recuerda poner tu usuario real
+            password="CONTRASEÑA", # Recuerda poner tu contraseña real
+            database="b6yidpnlrwoyrb2wge9z",
+            port=3306
+           
         )
-
-        return conexion
-
+        if conexion.is_connected():
+            return conexion
     except Exception as e:
         print("Error conectando a la base de datos:", e)
         return None
