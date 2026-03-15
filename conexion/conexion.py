@@ -4,8 +4,8 @@ def conectar():
     try:
         conexion = mysql.connector.connect(
             host="b6yidpnlrwoyrb2wge9z-mysql.services.clever-cloud.com",
-            user="USUARIO",
-            password="CONTRASEÑA",
+            user="uvaqtfxavnoiylnp",
+            password="SMbCjlqgP29ck7OuxTiA",
             database="b6yidpnlrwoyrb2wge9z",
             port=3306,
             ssl_ca="/etc/ssl/certs/ca-certificates.crt"
