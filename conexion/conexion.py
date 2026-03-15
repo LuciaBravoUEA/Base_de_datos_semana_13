@@ -6,9 +6,9 @@ def conectar():
     try:
         db_url = os.getenv("DATABASE_URL")
 
-        if not db_url:
-            print("DATABASE_URL no existe")
-            return None
+        # Cambiar mysql:// por mysql+mysqlconnector://
+        if db_url.startswith("mysql://"):
+            db_url = db_url.replace("mysql://", "mysql+mysqlconnector://", 1)
 
         url = urlparse(db_url)
 
@@ -16,11 +16,11 @@ def conectar():
             host=url.hostname,
             user=url.username,
             password=url.password,
-            database=url.path[1:],
+            database=url.path.replace("/", ""),
             port=url.port
         )
 
-        print("Conexion exitosa a MySQL")
+        print("Conexión exitosa")
         return conexion
 
     except Exception as e:
