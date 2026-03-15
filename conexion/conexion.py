@@ -1,14 +1,13 @@
-import mysql.connector
+import pymysql
 
 def conectar():
     try:
-        conexion = mysql.connector.connect(
+        conexion = pymysql.connect(
             host="b6yidpnlrwoyrb2wge9z-mysql.services.clever-cloud.com",
             user="uvaqtfxavnoiylnp",
             password="SMbCjlqgP29ck7OuxTiA",
             database="b6yidpnlrwoyrb2wge9z",
-            port=3306,
-            ssl_ca="/etc/ssl/certs/ca-certificates.crt"
+            port=3306
         )
         return conexion
 
