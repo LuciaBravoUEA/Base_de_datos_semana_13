@@ -8,7 +8,7 @@ def conectar():
             password="SMbCjlqgP29ck7OuxTiA",
             database="b6yidpnlrwoyrb2wge9z",
             port=3306,
-            cursorclass=pymysql.cursors.DictCursor  # << Muy importante para que funcione tu HTML
+            cursorclass=pymysql.cursors.DictCursor  
         )
         return conexion
 

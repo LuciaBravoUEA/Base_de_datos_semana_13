@@ -35,9 +35,9 @@
 
 {% for u in usuarios %}
 <tr>
-    <td>{{ u.id }}</td>
+    <td>{{ u.id }}</td>       
     <td>{{ u.nombre }}</td>
-    <td>{{ u.email }}</td> 
+    <td>{{ u.email }}</td>   
     <td>{{ u.password }}</td>
     <td><a href="/eliminar_usuario_mysql/{{ u.id }}">Eliminar</a></td>
 </tr>
