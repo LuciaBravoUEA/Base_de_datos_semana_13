@@ -5,6 +5,11 @@ from urllib.parse import urlparse
 def conectar():
     try:
         db_url = os.getenv("DATABASE_URL")
+
+        if not db_url:
+            print("DATABASE_URL no existe")
+            return None
+
         url = urlparse(db_url)
 
         conexion = mysql.connector.connect(
@@ -12,10 +17,10 @@ def conectar():
             user=url.username,
             password=url.password,
             database=url.path[1:],
-            port=url.port,
-            ssl_disabled=False
+            port=url.port
         )
 
+        print("Conexion exitosa a MySQL")
         return conexion
 
     except Exception as e:
